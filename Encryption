@@ -1,0 +1,27 @@
+#include <stdio.h>
+
+int main(void)
+{
+    FILE *fp1, *fp2;
+    char ch;
+
+    fp1 = fopen("message.txt", "r");
+    if (fp1 == NULL) {
+        printf("Source File Could Not Be Found\n");
+        return 1;
+    }
+    fp2 = fopen("encrypted.txt", "w");
+    if (fp2 == NULL) {
+        printf("Target File Could Not Be Found\n");
+        fclose(fp1);
+        return 1;
+    }
+
+    while ((ch = fgetc(fp1)) != EOF)
+        fputc(ch - 3, fp2);          /* shift every character back by 3 */
+
+    fclose(fp1);
+    fclose(fp2);
+    printf("File encrypted successfully.\n");
+    return 0;
+}
