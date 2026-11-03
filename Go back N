@@ -1,0 +1,41 @@
+#include <stdio.h>
+
+int main(void)
+{
+    int total, N, base = 1, end, i, ack, sent = 0;
+
+    printf("--- Go-Back-N Protocol Simulation ---\n");
+    printf("Enter the total number of frames to send: ");
+    scanf("%d", &total);
+    printf("Enter the Window Size (N): ");
+    scanf("%d", &N);
+
+    printf("\nStarting transmission...\n");
+    printf("========================================\n");
+
+    while (base <= total) {
+        end = (base + N - 1 < total) ? base + N - 1 : total;
+
+        printf("\n[Sender] Sending Window:");
+        for (i = base; i <= end; i++) {
+            printf(" %d", i);
+            sent++;
+        }
+        printf("\n");
+
+        printf("[Receiver] Enter the last successfully received frame (Expected: %d): ", base);
+        scanf("%d", &ack);
+
+        if (ack >= base && ack <= end) {
+            printf("--> ACK %d received. Sliding window forward.\n", ack);
+            base = ack + 1;
+        } else {
+            printf("--> Timeout/Error! Go Back N: Retransmitting from frame %d\n", base);
+        }
+    }
+
+    printf("========================================\n");
+    printf("All %d frames sent successfully!\n", total);
+    printf("Total frame transmissions attempted: %d\n", sent);
+    return 0;
+}
