@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define WINDOW 4
+
+int main(void)
+{
+    int total, base = 1, i, end;
+
+    srand((unsigned)time(NULL));
+    printf("Enter total number of frames: ");
+    scanf("%d", &total);
+    printf("\n");
+
+    while (base <= total) {
+        end = (base + WINDOW - 1 < total) ? base + WINDOW - 1 : total;
+
+        printf("Sending frames:");
+        for (i = base; i <= end; i++)
+            printf(" %d", i);
+        printf("\n");
+
+        if (rand() % 2 == 0) {                     /* window lost -> resend */
+            printf("Some frames lost! Resending...\n");
+            printf("Sending frames:");
+            for (i = base; i <= end; i++)
+                printf(" %d", i);
+            printf("\n");
+        }
+
+        printf("Acknowledgment received up to frame %d\n", end);
+        base = end + 1;
+    }
+
+    printf("\nAll frames sent successfully (Sliding Window ARQ)\n");
+    return 0;
+}
